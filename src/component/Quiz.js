@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import Question from 'Question';
 import Result from './Result';
-import quizData from '../data/questions'; // Assuming questions are in a separate file
+import quizData from './quizData';
+import Answer from './Answer';
 
 const Quiz = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
-  // ... other state variables for score, etc.
+  const [score, setScore] = useState(0);
+  
 
-  const handleAnswerSelection = (answer) => {
-    setUserAnswers([...userAnswers, answer]);
-    // Update score or other necessary state
-    // Move to the next question
+  const handleAnswerSelection = (isCorrect) => {
+    if (isCorrect) {
+      setScore(score + 1); // Increment score if the answer is correct
+    }
+  };
+    
     setCurrentQuestion(currentQuestion + 1);
   };
 
@@ -19,15 +23,15 @@ const Quiz = () => {
     <div>
       {currentQuestion < quizData.length ? (
         <Question
-          question={quizData[currentQuestion].question}
-          options={quizData[currentQuestion].options}
-          handleAnswerSelection={handleAnswerSelection}
-        />
+        question={quizData[currentQuestion].question}
+        options={quizData[currentQuestion].options}
+        handleAnswerSelection={handleAnswerSelection}
+        currentQuestion={currentQuestion} // Pass currentQuestion as a prop
+      />
       ) : (
         <Result userAnswers={userAnswers} />
       )}
     </div>
   );
-};
 
 export default Quiz;
