@@ -1,20 +1,35 @@
-import React from 'react';
-import Question from './Question';
-import quizData from '../data/quizData.json'; // Importing quizData
+import React, { useState } from 'react';
+import Question from './component/Question';
+import quizData from './data/quizData.json'; // Importing quizData
+import Result from './component/Result'; // Import the Result component
 
-const Quiz = () => {
+
+const App = () => {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+
+  const handleAnswerSelection = (isCorrect) => {
+    if (isCorrect) {
+      setScore(score + 1);
+    }
+    setCurrentQuestion(currentQuestion + 1);
+  };
+
   return (
     <div>
-      {quizData.map((question, index) => (
+      {currentQuestion < quizData.length ? (
         <Question
-          key={index}
-          question={question.question}
-          options={question.options}
-          // Pass other necessary props as needed
+          question={quizData[currentQuestion].question}
+          options={quizData[currentQuestion].options}
+          handleAnswerSelection={handleAnswerSelection}
+          currentQuestion={currentQuestion}
         />
-      ))}
+      ) : (
+        <Result score={score} />
+      )}
     </div>
   );
 };
 
-export default Quiz;
+
+export default App;
